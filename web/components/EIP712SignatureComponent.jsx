@@ -257,7 +257,7 @@ const EIP712SignatureComponent = () => {
                 },
                 body: JSON.stringify(apiData, null, 2),
             });
-
+            console.log("API response:", response);
             const result = await response.json();
             console.log("API response:", result);
             setApiResponse(result);
