@@ -3,35 +3,24 @@
 
 ## Prerequisites
 
-- [Rust](https://www.rust-lang.org/tools/install)
 - [Node.js](https://nodejs.org/) (v14 or later)
 
 ## Installation
 
 1. Clone the repository:
    ```
-   git clone https://github.com/your-username/eip712-signature-project.git
+   git clone -b js https://github.com/your-username/eip712-signature-project.git
    cd eip712-signature-project
    ```
 
-2. Install wasm-pack:
-   ```
-   curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
-   ```
-
-3. Install Node.js dependencies:
+2. Install Node.js dependencies:
    ```
    npm install
    ```
 
 ## Building the Project
 
-1. Build the Rust/Wasm module:
-   ```
-   wasm-pack build --target web
-   ```
-
-2. Build the Vite/React project:
+1. Build the Vite/React project:
    ```
    npm run build
    ```
