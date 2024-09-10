@@ -4,7 +4,7 @@ import { ethers } from 'ethers';
 // API endpoints for different chain IDs
 const API_ENDPOINTS = {
     42161: 'https://gateway.prod.vertexprotocol.com/v1/',  // Arbitrum One
-    421614:'https://gateway.blast-test.vertexprotocol.com/v1', // Arbitrum Sepolia
+    421614:'https://gateway.sepolia-test.vertexprotocol.com/v1/', // Arbitrum Sepolia
     81457: 'https://gateway.blast-prod.vertexprotocol.com/v1/', // Blast
     5000: 'https://gateway.mantle-prod.vertexprotocol.com/v1/',  // Mantle
 };
