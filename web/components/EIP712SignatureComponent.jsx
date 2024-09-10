@@ -4,12 +4,14 @@ import { ethers } from 'ethers';
 // API endpoints for different chain IDs
 const API_ENDPOINTS = {
     42161: 'https://gateway.prod.vertexprotocol.com/v1/',  // Arbitrum One
+    421614:'https://gateway.blast-test.vertexprotocol.com/v1', // Arbitrum Sepolia
     81457: 'https://gateway.blast-prod.vertexprotocol.com/v1/', // Blast
     5000: 'https://gateway.mantle-prod.vertexprotocol.com/v1/',  // Mantle
 };
 
 const CONTRACT_ADDRESSES = {
     42161: "0xbbee07b3e8121227afcfe1e2b82772246226128e", // Arbitrum One
+    421614:"0xaDeFDE1A14B6ba4DA3e82414209408a49930E8DC", // Arbitrum Sepolia
     81457: "0x00f076fe36f2341a1054b16ae05fce0c65180ded", // Blast
     5000: "0x526d7c7ea3677eff28cb5ba457f9d341f297fd52",  // Mantle
 };
