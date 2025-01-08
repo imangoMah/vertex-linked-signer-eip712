@@ -18,6 +18,14 @@ const CONTRACT_ADDRESSES = {
 	146: "0x2f5F835d778eBE8c28fC743E50EB9a68Ca93c2Fa", // Sonic
 };
 
+const CHAIN_ID_NAME = {
+	42161: "Arbitrum One",
+	421614: "Arbitrum Sepolia",
+	81457: "Blast",
+	5000: "Mantle",
+	146: "Sonic",
+};
+
 function toBytes12(s) {
 	const result = new Uint8Array(12);
 	const bytes = new TextEncoder().encode(s);
@@ -25,6 +33,7 @@ function toBytes12(s) {
 	result.set(bytes.slice(0, len));
 	return result;
 }
+
 function addressToBytes32(address) {
 	// 移除 '0x' 前缀，如果存在的话
 	const cleanAddress = address.toLowerCase().replace(/^0x/, "");
@@ -33,6 +42,7 @@ function addressToBytes32(address) {
 	// 添加 '0x' 前缀并返回
 	return "0x" + paddedAddress;
 }
+
 function concatToBytes32(address, name) {
 	const result = new Uint8Array(32);
 	result.set(address);
@@ -58,6 +68,7 @@ const EIP712SignatureComponent = () => {
 	const [isSendDisabled, setIsSendDisabled] = useState(true);
 	const [chainId, setChainId] = useState(null);
 	const [apiResponse, setApiResponse] = useState(null);
+	const [desiredChainId, setDesiredChainId] = useState("");
 
 	const getContractAddress = (chainId) => {
 		const address = CONTRACT_ADDRESSES[chainId];
@@ -75,7 +86,21 @@ const EIP712SignatureComponent = () => {
 				const accounts = await provider.send("eth_requestAccounts", []);
 				setCurrentWallet(accounts[0]);
 
-				const network = await provider.getNetwork();
+				let network = await provider.getNetwork();
+				console.log("Connected to chain:", network);
+				console.log("Chain ID:", network.chainId);
+				console.log("Chain name:", network.name);
+				console.log("wallet address:", accounts[0]);
+
+				// 如果传入的 chainId 有值且与当前链 ID 不同，则切换到传入的链
+				if (desiredChainId && network.chainId !== parseInt(desiredChainId)) {
+					await provider.send("wallet_switchEthereumChain", [
+						{ chainId: ethers.utils.hexValue(parseInt(desiredChainId)) },
+					]);
+					network = await provider.getNetwork(); // 更新网络信息
+					console.log("Switched to chain:", network);
+				}
+
 				setChainId(network.chainId);
 
 				// Check if the wallet is a multi-sig
@@ -101,6 +126,7 @@ const EIP712SignatureComponent = () => {
 		setChainId(null);
 		setIsSendDisabled(true);
 		setApiResponse(null);
+		setDesiredChainId("");
 	};
 
 	const signMessage = async () => {
@@ -297,12 +323,26 @@ const EIP712SignatureComponent = () => {
 	return (
 		<div className="p-4 space-y-4">
 			{!currentWallet ? (
-				<button
-					onClick={connectWallet}
-					className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-				>
-					Connect Wallet
-				</button>
+				<div>
+					<select
+						value={desiredChainId}
+						onChange={(e) => setDesiredChainId(e.target.value)}
+						className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+					>
+						<option value="">Select Chain ID</option>
+						{Object.entries(CHAIN_ID_NAME).map(([id, name]) => (
+							<option key={id} value={id}>
+								{name} ({id})
+							</option>
+						))}
+					</select>
+					<button
+						onClick={connectWallet}
+						className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2"
+					>
+						Connect Wallet
+					</button>
+				</div>
 			) : (
 				<div>
 					<p>Current Wallet: {currentWallet}</p>
