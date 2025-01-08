@@ -7,7 +7,7 @@ const API_ENDPOINTS = {
 	421614: "https://gateway.sepolia-test.vertexprotocol.com/v1/", // Arbitrum Sepolia
 	81457: "https://gateway.blast-prod.vertexprotocol.com/v1/", // Blast
 	5000: "https://gateway.mantle-prod.vertexprotocol.com/v1/", // Mantle
-	146: "https://gateway.sonic-prod.vertexprotocol.com/v1", // Sonic
+	146: "https://gateway.sonic-prod.vertexprotocol.com/v1/", // Sonic
 };
 
 const CONTRACT_ADDRESSES = {
@@ -259,7 +259,7 @@ const EIP712SignatureComponent = () => {
 					result.error || `HTTP error! status: ${response.status}`
 				);
 			}
-
+			console.log("Nonce value:", result);
 			setError("");
 			return result?.data?.tx_nonce;
 		} catch (err) {
